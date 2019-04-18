@@ -1,0 +1,74 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Proxy Server to communicate to other microservices.",
+    "version": "1.0.0",
+    "title": "Helps to manage users and proxy for other micro-services"
+  },
+  "paths": {
+    "/api/members/list": {
+      "post": {
+        "tags": ["tms"],
+        "summary": "Helps to logged in btf system",
+        "description": "Helps to login using NTID and password",
+        "operationId": "login",
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "data",
+            "description": "Login to btf systems",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/login"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logged in successfully"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "403": {
+            "description": "Wrong Credential"
+          }
+        }
+      }
+    },
+    "/config": {
+      "get": {
+        "tags": ["config"],
+        "summary": "Run Time config in BTFUI Server",
+        "description": "Helps to get runtime config from server",
+        "operationId": "config",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "Successfully retrived config"
+          },
+          "500": {
+            "description": "Internal Server error"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "login": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "john.smith@hp.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "ZGshshGRoZGpkag=="
+        }
+      }
+    }
+  }
+}

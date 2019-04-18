@@ -1,0 +1,24 @@
+{
+  "name": "ts-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src\\index.ts",
+  "scripts": {
+    "dev": "nodemon --exec ts-node src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "manjit.kumar@hp.com",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^11.13.4",
+    "configparser": "^0.3.6",
+    "mongodb": "3.2.3",
+    "restify": "8.3.0",
+    "restify-swagger-jsdoc": "^3.0.0",
+    "typescript": "3.4.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.11",
+    "ts-node": "^8.1.0"
+  }
+}
