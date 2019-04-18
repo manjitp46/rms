@@ -19,13 +19,13 @@ export class ApiServer implements HttpServer {
     this.addRoute("get", url, requestHandler);
   }
   post(url: string, requestHandler: any): void {
-    throw new Error("Method not implemented.");
+    this.addRoute("post", url, requestHandler);
   }
   put(url: string, requestHandler: any): void {
     throw new Error("Method not implemented.");
   }
   delete(url: string, requestHandler: any): void {
-    throw new Error("Method not implemented.");
+    this.addRoute("del", url, requestHandler);
   }
 
   public start(): void {
@@ -100,7 +100,7 @@ export class ApiServer implements HttpServer {
       host: `${this.serverHost}:${this.serverPort}`, // The host (name or ip) serving the API. This MUST be the host only and does not include the scheme nor sub-paths.
       schemes: ["http","https"], // The transfer protocol of the API. Values MUST be from the list: "http", "https", "ws", "wss". (default: [])
       apis: [path.join(__dirname,'../controllers/*.ts'),path.join(__dirname,'../controllers/*.js')], // Path to the API docs (default: [])
-      definitions: { myObject: require("../docs/swagger-docs.json") }, // External definitions to add to swagger (default: [])
+      // definitions: { myObject: require("../docs/swagger-docs.json") }, // External definitions to add to swagger (default: [])
       routePrefix: this.urlPrefix, // prefix to add for all routes (default: '')
       forceSecure: false // force swagger-ui to use https protocol to load JSON file (default: false)
     });

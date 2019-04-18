@@ -15,7 +15,8 @@
     "mongodb": "3.2.3",
     "restify": "8.3.0",
     "restify-swagger-jsdoc": "^3.0.0",
-    "typescript": "3.4.3"
+    "typescript": "3.4.3",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "nodemon": "^1.18.11",
