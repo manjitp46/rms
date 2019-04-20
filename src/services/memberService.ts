@@ -1,5 +1,5 @@
 import { DatabaseHandler } from "../databases";
-import * as uuid from 'uuid';
+import * as uuid from "uuid";
 
 export class MemberService {
   private addMandatoryProperty(inputData) {
@@ -27,28 +27,57 @@ export class MemberService {
   public async addMember(inputData: object): Promise<any> {
     try {
       const dbInstance = DatabaseHandler.getDBInstance();
-      var data = await dbInstance.collection(this.COLLECTION_NAME).find(inputData).toArray();
-      if(data.length > 0) {
+      var data = await dbInstance
+        .collection(this.COLLECTION_NAME)
+        .find(inputData)
+        .toArray();
+      if (data.length > 0) {
         throw new Error("Member already exists!");
-      }else {
+      } else {
         inputData = this.addMandatoryProperty(inputData);
-        data = await dbInstance.collection(this.COLLECTION_NAME).insertOne(inputData);
+        data = await dbInstance
+          .collection(this.COLLECTION_NAME)
+          .insertOne(inputData);
         return data.ops;
       }
-    }catch(e) {
+    } catch (e) {
       throw e;
     }
   }
   public async deleteMember(inputData: string): Promise<any> {
     try {
       const dbInstance = DatabaseHandler.getDBInstance();
-      var data = await dbInstance.collection(this.COLLECTION_NAME).find({userId: inputData}).toArray();
-      console.log(data)
-      if(data.length) {
-        await dbInstance.collection(this.COLLECTION_NAME).deleteOne({userId: inputData})
+      var data = await dbInstance
+        .collection(this.COLLECTION_NAME)
+        .find({ userId: inputData })
+        .toArray();
+      console.log(data);
+      if (data.length) {
+        await dbInstance
+          .collection(this.COLLECTION_NAME)
+          .deleteOne({ userId: inputData });
       }
       return data;
-    }catch(e) {
+    } catch (e) {
+      throw e;
+    }
+  }
+  public async updateMember(inputData: object): Promise<any> {
+    try {
+      inputData["modified_at"] = new Date().toISOString();
+      const dbInstance = DatabaseHandler.getDBInstance();
+      var data = await dbInstance
+        .collection(this.COLLECTION_NAME)
+        .find({ userId: inputData["userId"] })
+        .toArray();
+      if (data.length === 0) {
+        throw new Error("Invalid userId");
+      }
+      data = await dbInstance
+        .collection(this.COLLECTION_NAME)
+        .updateOne({ userId: inputData["userId"] }, { $set: inputData });
+      return data;
+    } catch (e) {
       throw e;
     }
   }

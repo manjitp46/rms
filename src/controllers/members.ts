@@ -1,7 +1,6 @@
 import { Controller } from "./controller";
 import { Request, Response } from "restify";
 import { HttpServer } from "../server/HttpServer";
-import { DatabaseHandler } from "../databases";
 import { MemberService } from "../services/memberService";
 import { HTTP_STATUS_CODES } from "../http-codes/HttpCodes";
 const urlPrefix = "/members";
@@ -10,6 +9,7 @@ export class MembersController implements Controller {
     httpServer.get(`${urlPrefix}/list`, this.list.bind(this));
     httpServer.post(`${urlPrefix}/add`, this.addMember.bind(this));
     httpServer.delete(`${urlPrefix}/delete`, this.deleteMember.bind(this));
+    httpServer.put(`${urlPrefix}/update`, this.updateMember.bind(this));
   }
   /**
    * @swagger
@@ -80,12 +80,45 @@ export class MembersController implements Controller {
       dataToReturn["Message"] = "Please pass user_id in query string!";
       dataToReturn["Data"] = null;
       res.send(HTTP_STATUS_CODES.BAD_REQUEST, dataToReturn);
-    }else {
+    } else {
       const memberService = new MemberService();
       dataToReturn["ErrorCode"] = 0;
       dataToReturn["Message"] = "Resource deleted successfully!";
       dataToReturn["Data"] = await memberService.deleteMember(inputData);
-      res.send(HTTP_STATUS_CODES.HTTP_OK, dataToReturn);
+      res.send(HTTP_STATUS_CODES.HTTP_ACCEPTED, dataToReturn);
+    }
+  }
+
+  private async updateMember(req: Request, res: Response) {
+    var dataToReturn = {};
+    var result = null;
+    dataToReturn["ErrorCode"] = 0;
+    var inputData = req.body && req.body.data;
+    if (!inputData) {
+      dataToReturn["ErrorCode"] = -1;
+      dataToReturn["Message"] = "Please pass data in request body!";
+      dataToReturn["Data"] = null;
+      res.send(HTTP_STATUS_CODES.BAD_REQUEST, dataToReturn);
+    } else if (!inputData.userId) {
+      dataToReturn["ErrorCode"] = -1;
+      dataToReturn["Message"] = "userId is a mandatory parameter to update!";
+      dataToReturn["Data"] = null;
+      res.send(HTTP_STATUS_CODES.BAD_REQUEST, dataToReturn);
+    } else {
+      const memberService = new MemberService();
+      dataToReturn["ErrorCode"] = 0;
+      dataToReturn["Message"] = "Resource successfully updated!";
+
+      try {
+        result = await memberService.updateMember(inputData);
+        dataToReturn["Data"] = result;
+        res.send(HTTP_STATUS_CODES.HTTP_ACCEPTED, dataToReturn);
+      } catch (e) {
+        dataToReturn["Data"] = null;
+        dataToReturn["Message"] =
+          "failed to update resource with error!" + e.message;
+        res.send(HTTP_STATUS_CODES.INTERNAL_SERVER_ERROR, dataToReturn);
+      }
     }
   }
 }
