@@ -11,6 +11,6 @@ function print2Message(message) {
     console.log(message);
 }
 
-function xyz() {
+function printingsomething() {
     console.log("printing xyz")
 }
