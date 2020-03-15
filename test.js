@@ -9,5 +9,8 @@ function printMessage(message) {
 
 function print2Message(message) {
     console.log(message);
-    
+}
+
+function printingsomething() {
+    console.log("printing xyz")
 }
